@@ -19,7 +19,6 @@ export const addBanner = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(400).json({ message: 'Bad request' });
     }
-
 }
 export const detailBanner = async (req: Request, res: Response) => {
     try {

@@ -1,4 +1,5 @@
 export interface INews {
+    userId?: number;
     newsId: number;
     coffeeShopName: string;
     title: string;

@@ -1,4 +1,5 @@
 import { Association, DataTypes, Model, Optional } from 'sequelize';
+import { Constant } from '../constant';
 import { sequelize } from '../db'
 import { GroupImage } from './groupImage';
 import { Location } from './location';
@@ -45,17 +46,55 @@ class Event extends Model<EventAttributes, EventCreationAttributes> implements E
         user: Association<Event, User>;
         schedule: Association<Event, Schedule>;
     };
-    static async getEvents(): Promise<Event[]> {
+    static async getEvents(): Promise<any[]> {
         const events = await Event.findAll();
-        return events
+        const convertedEvents = events.map(async (event) => {
+            const coffeeShopNamePromise = Constant.getUserShopName(event.user_id);
+            const imageUrlPromise = Constant.getImageUrl(event.groupImage_id);
+            const [coffeeShopName, imageUrl] = await Promise.all([coffeeShopNamePromise, imageUrlPromise]);
+            return {
+                eventId: event.event_id,
+                name: event.name,
+                address: event.location_id,
+                date: new Date(event.date).toISOString(),
+                description: event.description,
+                startTime: new Date(event.start_time).toISOString(),
+                endTime: new Date(event.end_time).toISOString(),
+                seatCount: event.seat_count,
+                //@ts-ignore
+                price: parseFloat(Number(event?.price)),
+                coffeeShopName,
+                imageUrl,
+            };
+        });
+        return Promise.all(convertedEvents);
     }
-    static async getUserEvents(userId: number): Promise<Event[]> {
+    static async getUserEvents(userId: number): Promise<any[]> {
         const events = await Event.findAll({
             where: {
                 user_id: userId
             }
         });
-        return events
+        const convertedEvents = events.map(async (event) => {
+            const coffeeShopNamePromise = Constant.getUserShopName(event.user_id);
+            const imageUrlPromise = Constant.getImageUrl(event.groupImage_id);
+            const [coffeeShopName, imageUrl] = await Promise.all([coffeeShopNamePromise, imageUrlPromise]);
+            return {
+                eventId: event.event_id,
+                name: event.name,
+                address: event.location_id,
+                date: new Date(event.date).toISOString(),
+                description: event.description,
+                startTime: new Date(event.start_time).toISOString(),
+                endTime: new Date(event.end_time).toISOString(),
+                seatCount: event.seat_count,
+                //@ts-ignore
+                price: parseFloat(Number(event?.price)),
+                coffeeShopName,
+                imageUrl,
+            };
+        });
+        return Promise.all(convertedEvents);
     }
     static async addEvent(eventData: EventAttributes): Promise<Event> {
         try {
@@ -65,10 +104,27 @@ class Event extends Model<EventAttributes, EventCreationAttributes> implements E
             throw new Error('Unable to add banner');
         }
     }
-    static async getDetailEvent(eventId: number): Promise<Event | null> {
+    static async getDetailEvent(eventId: number): Promise<any | null> {
         try {
             const event = await Event.findByPk(eventId);
-            return event;
+            const coffeeShopNamePromise = Constant.getUserShopName(event?.user_id as number);
+            const imageUrlPromise = Constant.getImageUrl(event?.groupImage_id as number);
+            const [coffeeShopName, imageUrl] = await Promise.all([coffeeShopNamePromise, imageUrlPromise]);
+            const convertedEvent = {
+                eventId: event?.event_id,
+                name: event?.name,
+                address: event?.location_id,
+                date: new Date(event?.date as Date).toISOString(),
+                description: event?.description,
+                startTime: new Date(event?.start_time as Date).toISOString(),
+                endTime: new Date(event?.end_time as Date).toISOString(),
+                seatCount: event?.seat_count,
+                //@ts-ignore
+                price: parseFloat(Number(event?.price)),
+                coffeeShopName,
+                imageUrl,
+            };
+            return convertedEvent;
         } catch (error) {
             throw new Error('Not found');
         }
@@ -156,4 +212,3 @@ Event.init(
 );
 export { Event };
 Event.belongsTo(GroupImage, { foreignKey: 'groupImage_id', as: 'groupImage' });
-Event.hasOne(Schedule, { foreignKey: 'event_id', as: 'schedule' });

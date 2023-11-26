@@ -9,6 +9,7 @@ import { listUserSchedule , listCustomerSchedule, bookSchedule, updateSchedule, 
 import { listService, detailService, addService, deleteService, serviceByUser, updateService  } from "../controllers/ServiceController";
 import { listUser, searchUser, updateUser, bannedUser, detailUser } from "../controllers/UserController";
 import { forget, login, register, resetPassword, updateBan } from "../controllers/AccountController";
+import { createVnpay } from "../controllers/VnpayController";
 
 const router = express.Router();
 //Auth
@@ -55,7 +56,7 @@ router.delete("/api/Location/Delete?id=:id", deleteLocation)
 
 //News
 router.get("/api/News/List", listNews);
-router.post("/api/News/Add", addNews);
+router.post("/api/News/Create", addNews);
 router.get("/api/News/Detail/:id", detailNews);
 router.get("/api/News/User/:userId", newsByUser);
 router.put("/api/News/Update", updateNews);
@@ -83,4 +84,6 @@ router.put("/api/User/Update", updateUser);
 router.get("/api/User/Detail/:id", detailUser);
 router.get("/api/User/Banned", bannedUser);
 
+//VNPAY
+router.get("/api/Vnpay", createVnpay)
 export default router;

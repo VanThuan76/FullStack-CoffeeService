@@ -1,4 +1,5 @@
 import InputUpload from '@/components/common/UploadInput';
+import { useAppSelector } from '@/hooks/useRedux';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Button, Form, Input, message, Modal, Row, Col, DatePicker } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
@@ -16,6 +17,7 @@ interface Props {
 
 const FormNews = ({ editId, open, setOpen, refetch }: Props) => {
   const [form] = useForm();
+  const { user } = useAppSelector(state => state.appSlice)
   const isEditIdValidNumber = typeof editId === 'number';
   const createMutation = useMutation({
     mutationFn: (body: INewsAdd) => newsService.createNews(body),
@@ -52,7 +54,11 @@ const FormNews = ({ editId, open, setOpen, refetch }: Props) => {
       };
       updateMutation.mutate(formEdit);
     } else {
-      createMutation.mutate(value);
+      const bodyNew = {
+        userId: user && user.id,
+        ...value,
+      }
+      createMutation.mutate(bodyNew);
     }
   }
 

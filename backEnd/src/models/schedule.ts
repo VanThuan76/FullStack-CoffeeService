@@ -1,4 +1,5 @@
 import { Association, DataTypes, Model, Optional, where } from 'sequelize';
+import { Constant } from '../constant';
 import { sequelize } from '../db'
 import { Customer, CustomerAttributes } from './customer';
 import { Event, EventAttributes } from './event';
@@ -36,21 +37,83 @@ class Schedule extends Model<ScheduleAttributes, ScheduleCreationAttributes> imp
         user: Association<Schedule, User>;
         customer: Association<Schedule, Customer>;
     };
-    static async getSchedulesByUser(userId: number): Promise<Schedule[]> {
+    static async getSchedulesByUser(userId: number): Promise<any[]> {
         const schedules = await Schedule.findAll({
             where: {
                 user_id: userId
             }
         });
-        return schedules
+        const convertedSchedules = schedules.map(async (item) => {
+            const event = await Event.findByPk(item.event_id);
+            const customer = await Customer.findByPk(item.customer_id);
+            const coffeeShopNamePromise = Constant.getUserShopName(event?.user_id as number);
+            const imageUrlPromise = Constant.getImageUrl(event?.groupImage_id as number);
+            const [coffeeShopName, imageUrl] = await Promise.all([coffeeShopNamePromise, imageUrlPromise]);
+            return {
+                scheduleId: item.schedule_id,
+                event: {
+                    eventId: event?.event_id,
+                    name: event?.name,
+                    date: new Date(event?.date as Date).toISOString(),
+                    imageUrl: imageUrl,
+                    description: event?.description,
+                    startTime: new Date(event?.start_time as Date).toISOString(),
+                    endTime: new Date(event?.end_time as Date).toISOString(),
+                    seatCount: event?.seat_count,
+                    price: event?.price,
+                    coffeeShopName: coffeeShopName
+                },
+                customer: {
+                    customerId: customer?.customer_id,
+                    name: customer?.name,
+                    phone: customer?.phone,
+                    address: customer?.address,
+                    email: customer?.email,
+                    avatar: customer?.avatar
+                },
+                ticketCount: item.ticket_count,
+            };
+        });
+        return Promise.all(convertedSchedules);
     }
-    static async getSchedulesByCustomer(customerId: number): Promise<Schedule[]> {
+    static async getSchedulesByCustomer(customerId: number): Promise<any[]> {
         const schedules = await Schedule.findAll({
             where: {
                 customer_id: customerId
             }
         });
-        return schedules
+        const convertedSchedules = schedules.map(async (item) => {
+            const event = await Event.findByPk(item.event_id);
+            const customer = await Customer.findByPk(item.customer_id);
+            const coffeeShopNamePromise = Constant.getUserShopName(event?.user_id as number);
+            const imageUrlPromise = Constant.getImageUrl(event?.groupImage_id as number);
+            const [coffeeShopName, imageUrl] = await Promise.all([coffeeShopNamePromise, imageUrlPromise]);
+            return {
+                scheduleId: item.schedule_id,
+                event: {
+                    eventId: event?.event_id,
+                    name: event?.name,
+                    date: new Date(event?.date as Date).toISOString(),
+                    imageUrl: imageUrl,
+                    description: event?.description,
+                    startTime: new Date(event?.start_time as Date).toISOString(),
+                    endTime: new Date(event?.end_time as Date).toISOString(),
+                    seatCount: event?.seat_count,
+                    price: event?.price,
+                    coffeeShopName: coffeeShopName
+                },
+                customer: {
+                    customerId: customer?.customer_id,
+                    name: customer?.name,
+                    phone: customer?.phone,
+                    address: customer?.address,
+                    email: customer?.email,
+                    avatar: customer?.avatar
+                },
+                ticketCount: item.ticket_count,
+            };
+        });
+        return Promise.all(convertedSchedules);
     }
     static async bookSchedule(scheduleData: IScheduleBook) {
         try {
@@ -132,3 +195,5 @@ Schedule.init(
     }
 );
 export { Schedule };
+Schedule.hasOne(Event, { foreignKey: 'event_id', as: 'event' });
+Schedule.hasOne(User, { foreignKey: 'user_id', as: 'user' });

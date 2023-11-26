@@ -13,6 +13,7 @@ interface Props {
 }
 
 const Following = ({ followingData, userType, loggedInUserId }: Props) => {
+  console.log(loggedInUserId)
   const followingShop = useMutation({
     mutationKey: ['followingShopMutaion'],
     mutationFn: (body: IFollowingAdd) => followingService.newFollowing(body),

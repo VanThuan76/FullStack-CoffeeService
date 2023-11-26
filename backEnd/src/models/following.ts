@@ -23,21 +23,67 @@ class Following extends Model<FollowingAttributes, FollowingCreationAttributes> 
         user: Association<Following, User>;
         customer: Association<Following, Customer>;
     };
-    static async getFollowingUsers(userId: number): Promise<Following[]> {
-        const events = await Following.findAll({
+    static async getFollowingUsers(userId: number): Promise<any[]> {
+        const followings = await Following.findAll({
             where: {
                 user_id: userId
             }
         });
-        return events
+        const convertedFollowing = followings.map(async (item) => {
+            const user = await User.findByPk(item.user_id);
+            const customer = await Customer.findByPk(item.customer_id);
+            return {
+                customer: {
+                    customerId: customer?.customer_id,
+                    name: customer?.name,
+                    phone: customer?.phone,
+                    address: customer?.address,
+                    email: customer?.email,
+                    avatar: customer?.avatar
+                },
+                user: {
+                    userId: user?.user_id,
+                    address: user?.address,
+                    email: user?.email,
+                    phone: user?.phone,
+                    coffeeShopName: user?.coffeeShopName,
+                    avatar: user?.avatar
+                },
+                followed: true
+            }
+        });
+        return Promise.all(convertedFollowing);
     }
-    static async getFollowingCustomers(customerId: number): Promise<Following[]> {
-        const events = await Following.findAll({
+    static async getFollowingCustomers(customerId: number): Promise<any[]> {
+        const followings = await Following.findAll({
             where: {
                 customer_id: customerId
             }
         });
-        return events
+        const convertedFollowing = followings.map(async (item) => {
+            const user = await User.findByPk(item.user_id);
+            const customer = await Customer.findByPk(item.customer_id);
+            return {
+                customer: {
+                    customerId: customer?.customer_id,
+                    name: customer?.name,
+                    phone: customer?.phone,
+                    address: customer?.address,
+                    email: customer?.email,
+                    avatar: customer?.avatar
+                },
+                user: {
+                    userId: user?.user_id,
+                    address: user?.address,
+                    email: user?.email,
+                    phone: user?.phone,
+                    coffeeShopName: user?.coffeeShopName,
+                    avatar: user?.avatar
+                },
+                followed: true
+            }
+        });
+        return Promise.all(convertedFollowing);
     }
 
     static async addFollow(followingData: FollowingAttributes): Promise<Following> {
@@ -87,3 +133,4 @@ Following.init(
     }
 );
 export { Following };
+Following.hasOne(User, { foreignKey: 'user_id', as: 'user' });

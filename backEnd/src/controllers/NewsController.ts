@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { News } from "../models/news";
+import { GroupImage } from "../models/groupImage";
+import { Image } from "../models/image";
 export const listNews = async (req: Request, res: Response) => {
     try {
         const news = await News.listNews();
@@ -21,9 +23,11 @@ export const detailNews = async (req: Request, res: Response) => {
     }
 }
 export const addNews = async (req: Request, res: Response) => {
-    const newsData = req.body;
+    const { description, imageUrl, title, userId } = req.body;
     try {
-        await News.addNews(newsData);
+        const image = await Image.findOne({ where: { image: imageUrl } });
+        const groupImage = await GroupImage.create({ image_id: Number(image?.image_id) })
+        await News.addNews({ title: title, description: description, user_id: userId, groupImage_id: groupImage.groupImage_id, created_date: new Date() });
         return res.status(200).json({ message: 'News created successfully' });
     } catch (error) {
         return res.status(400).json({ message: 'Unable to create news' });

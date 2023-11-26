@@ -20,7 +20,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       },
     });
     if (account) {
-      let userInfo;
+      let userInfo: any; // You can define a more specific type for userInfo
       const customer = await Customer.findOne({
         where: {
           account_id: account.account_id,
@@ -31,25 +31,33 @@ export const login = async (req: Request, res: Response): Promise<void> => {
           account_id: account.account_id,
         },
       });
+
       if (customer) {
         userInfo = {
           id: customer.customer_id,
+          profileId: account.account_id,
           role: 'Customer',
           name: customer.name,
           phone: customer.phone,
           email: customer.email,
           address: customer.address,
         };
-      } else {
+      } else if (admin) {
         userInfo = {
-          id: account.account_id,
+          id: admin.admin_id,
+          profileId: account.account_id,
           role: 'Admin',
-          name: admin?.name,
-          phone: admin?.phone,
-          email: admin?.email,
-          address: admin?.address,
+          name: admin.name,
+          phone: admin.phone,
+          email: admin.email,
+          address: admin.address,
         };
+      } else {
+        // Handle if neither customer nor admin info is found
+        res.status(404).json({ message: 'User not found' });
+        return;
       }
+
       const token = jwt.sign(userInfo, secretKey);
       res.json({ token });
     } else {
@@ -60,6 +68,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -168,7 +177,7 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
       }
     } catch (error) {
       throw new Error('Unable to update password');
-    }    
+    }
     res.status(200).json({ message: 'Password updated successfully!' });
   } catch (error: any) {
     console.error(error);

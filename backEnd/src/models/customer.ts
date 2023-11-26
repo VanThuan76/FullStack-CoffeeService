@@ -148,5 +148,5 @@ Schedule.belongsTo(Customer, { foreignKey: 'customer_id', as: 'customer' });
 Customer.hasMany(Schedule, { foreignKey: 'customer_id', as: 'schedules' });
 //Waiting
 Waiting.belongsTo(Customer, { foreignKey: 'customer_id', as: 'customer' });
-Customer.hasOne(Waiting, { foreignKey: 'customer_id', as: 'waiting' });
+Customer.hasMany(Waiting, { foreignKey: 'customer_id', as: 'waiting' });
 

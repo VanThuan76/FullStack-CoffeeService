@@ -1,3 +1,7 @@
+import { Image } from "../models/image";
+import { GroupImage } from "../models/groupImage";
+import { User } from "../models/user";
+
 export class Constant {
     static generateRandomString(length: number): string {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -13,5 +17,23 @@ export class Constant {
         }
 
         return result;
+    }
+    static async getImageUrl(groupImageId: number): Promise<string> {
+        const groupImage = await GroupImage.findByPk(groupImageId);
+        if (groupImage) {
+            const imageUrl = await Image.findByPk(groupImage.image_id);
+            if (imageUrl) {
+                return imageUrl.image;
+            }
+            return '';
+        }
+        return '';
+    }
+    static async getUserShopName(userId: number): Promise<string> {
+        const user = await User.findByPk(userId);
+        if (user) {
+            return user.coffeeShopName
+        }
+        return '';
     }
 }

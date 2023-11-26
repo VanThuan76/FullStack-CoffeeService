@@ -20,7 +20,7 @@ const NewsManagement = ({}: Props) => {
 
   const { data: dataNews, refetch } = useQuery(['listNews'], () => newsService.getAllNews(), {
     select: data => {
-      const filterData = data.data.filter(item => item.coffeeShopName === user?.name);
+      const filterData = data.data.filter(item => item.userId === user?.id);
       return filterData;
     },
   });

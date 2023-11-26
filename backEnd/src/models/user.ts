@@ -6,7 +6,6 @@ import { Event } from './event';
 import { Following } from './following';
 import { Location } from './location';
 import { News } from './news';
-import { Schedule } from './schedule';
 import { Service } from './service';
 
 interface UserAttributes {
@@ -154,12 +153,6 @@ User.hasMany(Location, { foreignKey: 'user_id', as: 'locations' });
 //Service
 Service.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 User.hasMany(Service, { foreignKey: 'user_id', as: 'services' });
-//Following
-Following.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-User.hasMany(Following, { foreignKey: 'user_id', as: 'followings' });
-//Schedule
-Schedule.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-User.hasMany(Schedule, { foreignKey: 'user_id', as: 'schedules' });
 //News
 News.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 User.hasMany(News, { foreignKey: 'user_id', as: 'news' });

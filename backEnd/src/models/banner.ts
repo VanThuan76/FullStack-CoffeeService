@@ -20,9 +20,16 @@ class Banner extends Model<BannerAttributes, BannerCreationAttributes> implement
     public static associations: {
         user: Association<Banner, User>;
     };
-    static async listBanner(): Promise<Banner[]> {
+    static async listBanner(): Promise<any[]> {
         const banners = await Banner.findAll();
-        return banners
+        const convertedBanners = banners.map((banner) => {
+            return {
+                bannerId: banner.banner_id,
+                userId: banner.user_id,
+                imageUrl: banner.image_url,
+            }
+        });
+        return convertedBanners;
     }
 
     static async addBanner(bannerData: BannerCreationAttributes): Promise<Banner> {
@@ -34,10 +41,15 @@ class Banner extends Model<BannerAttributes, BannerCreationAttributes> implement
         }
     }
 
-    static async detailBanner(banner_id: number): Promise<Banner | null> {
+    static async detailBanner(banner_id: number): Promise<any | null> {
         try {
             const banner = await Banner.findByPk(banner_id);
-            return banner;
+            const convertedBanners = {
+                bannerId: banner?.banner_id,
+                userId: banner?.user_id,
+                imageUrl: banner?.image_url,
+            }
+            return convertedBanners;
         } catch (error) {
             throw new Error('Not found');
         }

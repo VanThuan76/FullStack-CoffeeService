@@ -1,4 +1,5 @@
 import { Association, DataTypes, Model, Optional } from 'sequelize';
+import { Constant } from '../constant';
 import { sequelize } from '../db'
 import { GroupImage } from './groupImage';
 import { User } from './user';
@@ -29,31 +30,68 @@ class News extends Model<NewsAttributes, NewsCreationAttributes> implements News
         user: Association<News, User>;
         groupImage: Association<News, GroupImage>;
     };
-    static async listNews(): Promise<News[]> {
+    static async listNews(): Promise<any[]> {
         const news = await News.findAll();
-        return news
+        const convertedNews = news.map(async (item) => {
+            const coffeeShopName = await Constant.getUserShopName(item.user_id);
+            const imageUrl = await Constant.getImageUrl(item.groupImage_id);
+            return {
+                userId: item.user_id,
+                newsId: item.news_id,
+                coffeeShopName,
+                title: item.title,
+                description: item.description,
+                imageUrl,
+                createdDate: item.created_date,
+            };
+        });
+        return Promise.all(convertedNews);
     }
-    static async getUserNews(userId: number): Promise<News[]> {
-        const events = await News.findAll({
+    static async getUserNews(userId: number): Promise<any[]> {
+        const news = await News.findAll({
             where: {
                 user_id: userId
             }
         });
-        return events
+        const convertedNews = news.map(async (item) => {
+            const coffeeShopName = await Constant.getUserShopName(item.user_id);
+            const imageUrl = await Constant.getImageUrl(item.groupImage_id);
+            return {
+                userId: item.user_id,
+                newsId: item.news_id,
+                coffeeShopName,
+                title: item.title,
+                description: item.description,
+                imageUrl,
+                createdDate: item.created_date,
+            };
+        });
+        return Promise.all(convertedNews);
     }
-    static async detailNews(news_id: number): Promise<News | null> {
+    static async detailNews(news_id: number): Promise<any | null> {
         try {
             const news = await News.findByPk(news_id);
-            return news;
+            const coffeeShopName = await Constant.getUserShopName(news?.user_id as number);
+            const imageUrl = await Constant.getImageUrl(news?.groupImage_id as number);
+            const convertedNews = {
+                newsId: news?.news_id,
+                coffeeShopName,
+                title: news?.title,
+                description: news?.description,
+                imageUrl,
+                createdDate: news?.created_date,
+            };
+            return convertedNews;
         } catch (error) {
             throw new Error('Not found');
         }
     }
-    static async addNews(newsData: NewsAttributes): Promise<News> {
+    static async addNews(newsData: any): Promise<News> {
         try {
             const news = await News.create(newsData);
             return news;
         } catch (error) {
+            console.error('Error in addNews method:', error); // Log lỗi cụ thể ở đây
             throw new Error('Unable to add news');
         }
     }
