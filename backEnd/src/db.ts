@@ -5,7 +5,7 @@ const dbConfig: PoolOptions = {
   host: '127.0.0.1',
   port: 3306,
   user: 'root',
-  password: 'vanthuan76',
+  password: '',
   database: 'coffee_house_system',
   waitForConnections: true,
   connectionLimit: 10,
