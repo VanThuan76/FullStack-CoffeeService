@@ -75,6 +75,3 @@ Location.init(
     }
 );
 export { Location };
-
-Event.belongsTo(Location, { foreignKey: 'location_id', as: 'location' });
-Location.hasOne(Event, { foreignKey: 'location_id', as: 'events' });

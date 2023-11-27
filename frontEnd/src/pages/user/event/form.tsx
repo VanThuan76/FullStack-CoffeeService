@@ -51,6 +51,7 @@ const FormEvent = ({ editId, open, setOpen, refetch }: Props) => {
       updateMutation.mutate(formEdit);
     } else {
       const formCreate = {
+        userId:user && user.id,
         coffeeShopName: user?.name,
         ...value,
       };

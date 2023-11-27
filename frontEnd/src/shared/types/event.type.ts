@@ -1,4 +1,5 @@
 export interface IEvent {
+  userId?: number;
   eventId: number;
   name: string;
   address?: string;

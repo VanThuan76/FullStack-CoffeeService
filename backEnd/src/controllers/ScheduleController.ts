@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Event } from "../models/event";
 import { Schedule } from "../models/schedule";
 export const listCustomerSchedule = async (req: Request, res: Response) => {
     const customerId = req.params.customerId;
@@ -25,9 +26,10 @@ export const listUserSchedule = async (req: Request, res: Response) => {
     }
 }
 export const bookSchedule = async (req: Request, res: Response) => {
-    const scheduleData = req.body;
+    const { customerId, eventId, ticketCount } = req.body;
     try {
-        await Schedule.bookSchedule(scheduleData);
+        const event = await Event.findOne({ where: { event_id: eventId } });
+        await Schedule.bookSchedule({ customer_id: customerId, event_id: eventId, ticket_count: ticketCount, user_id: event?.user_id });
         return res.status(200).json({ message: 'Schedule booked successfully' });
     } catch (error) {
         return res.status(400).json({ message: 'Unable to book schedule' });

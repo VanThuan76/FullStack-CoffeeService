@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
+import { Location } from "../models/location";
 import { Event } from "../models/event";
+import { GroupImage } from "../models/groupImage";
+import { Image } from "../models/image";
 export const listEvent = async (req: Request, res: Response) => {
     try {
         const events = await Event.getEvents();
@@ -12,9 +15,12 @@ export const listEvent = async (req: Request, res: Response) => {
     }
 }
 export const addEvent = async (req: Request, res: Response) => {
+    const { userId, name, address, imageUrl, date, startTime, endTime, seatCount, price, description } = req.body;
     try {
-        const eventInfo = req.body;
-        await Event.addEvent(eventInfo);
+        const image = await Image.findOne({ where: { image: imageUrl } });
+        const groupImage = await GroupImage.create({ image_id: Number(image?.image_id) })
+        const location = await Location.create({ address: address, user_id: userId })
+        await Event.addEvent({ name: name, location_id: location.location_id, date: date, groupImage_id: groupImage.groupImage_id, description: description, start_time: startTime, end_time: endTime, seat_count: seatCount, price: price, user_id: userId });
         return res.status(200).send('Event added successfully');
     } catch (error) {
         return res.status(400).json({ message: 'Error adding event' });

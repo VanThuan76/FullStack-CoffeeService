@@ -1,6 +1,7 @@
 import { Image } from "../models/image";
 import { GroupImage } from "../models/groupImage";
 import { User } from "../models/user";
+import { Location } from "../models/location";
 
 export class Constant {
     static generateRandomString(length: number): string {
@@ -33,6 +34,13 @@ export class Constant {
         const user = await User.findByPk(userId);
         if (user) {
             return user.coffeeShopName
+        }
+        return '';
+    }
+    static async getAddress(locationId: number): Promise<string> {
+        const location = await Location.findByPk(locationId);
+        if (location) {
+            return location.address
         }
         return '';
     }

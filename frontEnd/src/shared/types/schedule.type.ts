@@ -29,8 +29,8 @@ interface Event {
 }
 
 export interface IScheduleAdd {
-    event: EventAdd;
-    customer: CustomerAdd;
+    event: number;
+    customer: number;
     ticketCount: number;
 }
 

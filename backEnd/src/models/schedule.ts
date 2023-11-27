@@ -115,18 +115,9 @@ class Schedule extends Model<ScheduleAttributes, ScheduleCreationAttributes> imp
         });
         return Promise.all(convertedSchedules);
     }
-    static async bookSchedule(scheduleData: IScheduleBook) {
+    static async bookSchedule(scheduleData: any) {
         try {
-            const newSchedule = await Schedule.create({
-                // @ts-ignore
-                event_id: scheduleData.event.eventId,
-                // @ts-ignore
-                user_id: scheduleData.customer.customerId,
-                // @ts-ignore
-                customer_id: scheduleData.customer.customerId,
-                ticket_count: scheduleData.ticketCount,
-                // Thêm các trường dữ liệu khác tương ứng
-            });
+            const newSchedule = await Schedule.create(scheduleData);
             return newSchedule;
         } catch (error) {
             throw new Error('Unable to book schedule');

@@ -21,7 +21,7 @@ const EventManagement = ({}: Props) => {
 
   const { data: dataEvent, refetch } = useQuery(['listEvent'], () => eventService.getAllEvent(), {
     select: data => {
-      const filterData = data.data.filter(item => item.coffeeShopName === user?.name);
+      const filterData = data.data.filter(item => item.userId === user?.id);
       return filterData;
     },
   });
@@ -56,6 +56,7 @@ const EventManagement = ({}: Props) => {
       title: 'Tên địa điểm',
       dataIndex: 'locationId',
       key: 'locationId',
+      render: (_, record) => <p>{record.address}</p>,
     },
     {
       title: 'Ngày',

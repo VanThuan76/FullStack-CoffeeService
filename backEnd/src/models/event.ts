@@ -51,11 +51,13 @@ class Event extends Model<EventAttributes, EventCreationAttributes> implements E
         const convertedEvents = events.map(async (event) => {
             const coffeeShopNamePromise = Constant.getUserShopName(event.user_id);
             const imageUrlPromise = Constant.getImageUrl(event.groupImage_id);
-            const [coffeeShopName, imageUrl] = await Promise.all([coffeeShopNamePromise, imageUrlPromise]);
+            const addressPromise = Constant.getAddress(event.location_id);
+            const [coffeeShopName, imageUrl, address] = await Promise.all([coffeeShopNamePromise, imageUrlPromise, addressPromise]);
             return {
+                userId: event.user_id,
                 eventId: event.event_id,
                 name: event.name,
-                address: event.location_id,
+                address,
                 date: new Date(event.date).toISOString(),
                 description: event.description,
                 startTime: new Date(event.start_time).toISOString(),
@@ -78,11 +80,13 @@ class Event extends Model<EventAttributes, EventCreationAttributes> implements E
         const convertedEvents = events.map(async (event) => {
             const coffeeShopNamePromise = Constant.getUserShopName(event.user_id);
             const imageUrlPromise = Constant.getImageUrl(event.groupImage_id);
-            const [coffeeShopName, imageUrl] = await Promise.all([coffeeShopNamePromise, imageUrlPromise]);
+            const addressPromise = Constant.getAddress(event.location_id);
+            const [coffeeShopName, imageUrl, address] = await Promise.all([coffeeShopNamePromise, imageUrlPromise, addressPromise]);
             return {
+                userId: event.user_id,
                 eventId: event.event_id,
                 name: event.name,
-                address: event.location_id,
+                address,
                 date: new Date(event.date).toISOString(),
                 description: event.description,
                 startTime: new Date(event.start_time).toISOString(),
@@ -96,11 +100,12 @@ class Event extends Model<EventAttributes, EventCreationAttributes> implements E
         });
         return Promise.all(convertedEvents);
     }
-    static async addEvent(eventData: EventAttributes): Promise<Event> {
+    static async addEvent(eventData: any): Promise<Event> {
         try {
             const event = await Event.create(eventData);
             return event;
         } catch (error) {
+            console.log(error)
             throw new Error('Unable to add banner');
         }
     }
@@ -109,11 +114,13 @@ class Event extends Model<EventAttributes, EventCreationAttributes> implements E
             const event = await Event.findByPk(eventId);
             const coffeeShopNamePromise = Constant.getUserShopName(event?.user_id as number);
             const imageUrlPromise = Constant.getImageUrl(event?.groupImage_id as number);
-            const [coffeeShopName, imageUrl] = await Promise.all([coffeeShopNamePromise, imageUrlPromise]);
+            const addressPromise = Constant.getAddress(event?.location_id as number);
+            const [coffeeShopName, imageUrl, address] = await Promise.all([coffeeShopNamePromise, imageUrlPromise, addressPromise]);
             const convertedEvent = {
+                userId: event?.user_id,
                 eventId: event?.event_id,
                 name: event?.name,
-                address: event?.location_id,
+                address,
                 date: new Date(event?.date as Date).toISOString(),
                 description: event?.description,
                 startTime: new Date(event?.start_time as Date).toISOString(),
@@ -212,3 +219,5 @@ Event.init(
 );
 export { Event };
 Event.belongsTo(GroupImage, { foreignKey: 'groupImage_id', as: 'groupImage' });
+Event.belongsTo(Location, { foreignKey: 'location_id', as: 'location' });
+
