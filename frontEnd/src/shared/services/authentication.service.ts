@@ -17,6 +17,9 @@ class AuthService {
     forgetPassword(body: { email: string }): Promise<AxiosResponse> {
         return httpsNoToken.post('/Forget', body)
     }
+    forgetPasswordNew(body: { username: string, password: string }): Promise<AxiosResponse> {
+        return httpsNoToken.post('/Account/ForgotPassword', body)
+    }
 }
 
 export const authService = new AuthService()

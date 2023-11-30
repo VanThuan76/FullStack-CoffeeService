@@ -37,9 +37,7 @@ const Header = ({ isLogin }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUser, setIsUser] = useState(false)
   const [menu, setMenu] = useState<MenuProps['items']>();
-
   const handleRequestButtonClick = (customerId: number) => {
-
     showModal();
   };
 
@@ -99,9 +97,8 @@ const Header = ({ isLogin }: Props) => {
 
   const handleOk = () => {
     setIsModalOpen(false);
-
-    requestMutation.mutate(user && Number(user.profileId));
-
+    // @ts-ignore
+    requestMutation.mutate(user.id as number);
   };
 
   const handleCancel = () => {

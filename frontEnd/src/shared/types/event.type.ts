@@ -11,6 +11,8 @@ export interface IEvent {
   seatCount: number;
   price: number;
   coffeeShopName: string;
+  fromAge?: number;
+  toAge?: number;
 }
 export interface IEventAdd {
   eventId: number;
@@ -24,4 +26,6 @@ export interface IEventAdd {
   seatCount: number;
   price: number;
   coffeeShopName: string;
+  fromAge?: number;
+  toAge?: number;
 }

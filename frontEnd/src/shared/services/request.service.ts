@@ -9,10 +9,9 @@ class RequestService {
   sendRequest(id: number): Promise<AxiosResponse<any>> {
     return httpsNoToken.post(`Waiting/Request?customerId=${id}`)
   }
-  acceptRequest(customerId: number): Promise<AxiosResponse<any>> {
-    return httpsNoToken.delete(`Waiting/Accept?id=${customerId}`);
+  acceptRequest(requestId: number): Promise<AxiosResponse<any>> {
+    return httpsNoToken.post(`Waiting/Accept?id=${requestId}`);
   }
-
   // Hàm từ chối yêu cầu
   declineRequest(customerId: number): Promise<AxiosResponse<any>> {
     return httpsNoToken.post(`Waiting/Deny?customerId=${customerId}`);

@@ -6,7 +6,7 @@ const dbConfig: PoolOptions = {
   port: 3306,
   user: 'root',
   password: '',
-  database: 'coffee_house_system',
+  database: 'coffee_service',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -23,7 +23,7 @@ const sequelize = new Sequelize({
   port: 3306,
   username: 'root',
   password: 'vanthuan76',
-  database: 'coffee_house_system',
+  database: 'coffee_service',
   pool: {
     ...dbConfig,
     max: 10,

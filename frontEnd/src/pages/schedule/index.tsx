@@ -15,18 +15,18 @@ export function SchedulePage() {
   const [role, setRole] = useState<string>('');
   const { user } = useAppSelector(state => state.appSlice);
   const [userType, setUserType] = useState<string>();
-  
+
   const { data: scheduleData, refetch } = useQuery(['listSchedule', userType], () =>
     userType !== 'Customer'
-      ? scheduleService.getUserSchedule(user?.profileId as unknown as number)
-      : scheduleService.getCustomerSchedule(user?.profileId as unknown as number),
+      ? scheduleService.getUserSchedule(user?.id as unknown as number)
+      : scheduleService.getCustomerSchedule(user?.id as unknown as number),
   );
-  
+
   useEffect(() => {
     const role = getCookie(APP_SAVE_KEY.ROLE);
     setRole(role as string);
   }, []);
-  
+
   useEffect(() => {
     if (role === 'Customer') {
       setUserType('Customer');
@@ -42,10 +42,16 @@ export function SchedulePage() {
         <meta name='description' content='Lịch trình Coffee Shop' />
         <meta name='keywords' content='Coffee Shop' />
       </Head>
-      {scheduleData && (
+      {scheduleData ? (
         <ScrollRevealWrapper>
-          <Schedule scheduleData={scheduleData.data} userType={userType as string}></Schedule>
+          <Schedule
+            scheduleData={scheduleData.data}
+            userType={userType as string}
+            customerId={Number(user?.id)}
+          ></Schedule>
         </ScrollRevealWrapper>
+      ) : (
+        <p className='mt-10 text-2xl text-center'>Không có lịch đặt nào</p>
       )}
     </>
   );

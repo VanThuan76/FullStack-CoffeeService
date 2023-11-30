@@ -13,8 +13,8 @@ class ScheduleService {
     bookSchedule(body: any) {
         return httpsNoToken.post("/Schedule/Book", body)
     }
-    getVnpay(): Promise<AxiosResponse<any>> {
-        return httpsNoToken.get(`/Vnpay`)
+    getVnpay(body: {id:number, total: number}): Promise<AxiosResponse<any>> {
+        return httpsNoToken.post(`/Vnpay`, body)
     }
     updateSchedule(body: ISchedule) {
         return httpsNoToken.put(`/Schedule/Update`, body)

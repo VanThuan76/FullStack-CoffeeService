@@ -10,6 +10,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { eventService } from 'src/shared/services/event.service';
 import { scheduleService } from 'src/shared/services/schedule.service';
 import { useEffect, useState } from 'react';
+import { formatCurrency } from '@/utils/functions/formatCurrency';
 
 
 
@@ -88,7 +89,7 @@ const Schedule = ({ userType, scheduleData, }: Props) => {
                         className='w-full rounded-lg object-cover'
                       />
                       <div className='absolute top-0 left-0 p-3 dark:bg-green-700 bg-green-300 rounded-r-lg'>
-                        {item.ticketCount} {userType === 'Customer' ? `vé/ ${item.event.price} VND` : `/${item.event.seatCount} chỗ`}
+                        {item.ticketCount} {userType === 'Customer' ? `vé/ ${formatCurrency(item.event.price)}` : `/${item.event.seatCount} chỗ`}
                       </div>
                     </motion.div>
                     <div className=' w-full h-1/2 dark:bg-[#1B1D35] bg-slate-100 p-5 flex flex-col justify-between items-start gap-3'>

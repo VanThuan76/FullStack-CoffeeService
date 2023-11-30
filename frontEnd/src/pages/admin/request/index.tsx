@@ -98,7 +98,8 @@ const RequestManagement = ({ }: Props) => {
             <Button
               onClick={() => {
                 setRowId(record.customerId);
-                acceptRequestMutation.mutate(record.waitingId); // Gọi mutation acceptRequest
+                // @ts-ignore
+                acceptRequestMutation.mutate(record.waiting_id); // Gọi mutation acceptRequest
               }}
               icon={<CheckOutlined />}
             >

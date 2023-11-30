@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
 import { Service } from "../models/service";
+import { Image } from "../models/image";
+import { GroupImage } from "../models/groupImage";
+import { User } from "../models/user";
 
 export const listService = async (req: Request, res: Response) => {
     const services = await Service.listServices();
@@ -12,9 +15,19 @@ export const listService = async (req: Request, res: Response) => {
 export const addService = async (req: Request, res: Response) => {
     const service = req.body;
     try {
-        await Service.addService(service);
+        const image = await Image.findOne({ where: { image: service.imageUrl } });
+        const groupImage = await GroupImage.create({ image_id: Number(image?.image_id) })
+        const user = await User.findOne({where: {coffeeShopName: service.coffeeShopName}})
+        const body = {
+            name: service.name,
+            description: service.description,
+            groupImage_id: groupImage.groupImage_id,
+            user_id: user?.user_id
+        }
+        await Service.addService(body);
         return res.status(200).json({ message: 'Service added successfully' });
     } catch (ex) {
+        console.log(ex)
         return res.status(400).json({ message: 'Service not found' });
     }
 }

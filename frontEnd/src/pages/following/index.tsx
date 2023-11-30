@@ -18,9 +18,8 @@ export function FollowingPage() {
   const { data: followingData, refetch } = useQuery(['listFollowing', userType], () =>
     userType !== 'Customer'
       ? followingService.getUserList(user?.id as unknown as number)
-      : followingService.getCustomerList(user?.customerId as unknown as number),
+      : followingService.getCustomerList(user?.id as unknown as number),
   );
-
   useEffect(() => {
     const role = getCookie(APP_SAVE_KEY.ROLE);
     setRole(role as string);
@@ -41,7 +40,7 @@ export function FollowingPage() {
         <meta name='description' content='Sự kiện Coffee Shop' />
         <meta name='keywords' content='Coffee Shop' />
       </Head>
-      {followingData && (
+      {followingData ? (
         <ScrollRevealWrapper>
           <Following
             followingData={followingData.data}
@@ -49,6 +48,8 @@ export function FollowingPage() {
             loggedInUserId={user?.userId ? Number(user.userId) : user?.customerId ? Number(user.customerId) : 0}
           ></Following>
         </ScrollRevealWrapper>
+      ) : (
+        <p className='mt-10 text-2xl text-center'>Không có quán nào yêu thích</p>
       )}
     </>
   );

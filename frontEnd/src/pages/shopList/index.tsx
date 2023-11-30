@@ -17,7 +17,6 @@ export function ShopListPage() {
     const [userType, setUserType] = useState<string>();
 
     const { data: userData, refetch } = useQuery(['listUsers'], () => userService.getAllUser());
-
     useEffect(() => {
         const role = getCookie(APP_SAVE_KEY.ROLE);
         setRole(role as string);

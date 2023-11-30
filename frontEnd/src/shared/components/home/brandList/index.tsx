@@ -16,7 +16,7 @@ const BrandList = ({ brandsData }: Props) => {
   const queryClient = useQueryClient();
 
   const { data: brandData, isLoading: brandDataLoading } = useQuery(['listBrands'], () => {
-    return followingService.getCustomerList(parseInt(user?.profileId || '0', 10)); // Sử dụng followingService
+    return followingService.getCustomerList(parseInt(user?.id || '0', 10)); // Sử dụng followingService
   });
 
   console.log(brandData);
@@ -118,33 +118,33 @@ const BrandList = ({ brandsData }: Props) => {
         {brandDataLoading ? (
           <p>Loading...</p>
         ) : (
-          Array.isArray(brandData?.data) && brandData?.data.map((brand, idx) => (
+          Array.isArray(brandsData) && brandsData.map((brand, idx) => (
             <div className='mt-5' key={idx}>
-              <PreImage
-                src={brand.user.avatar}
+              {/* <PreImage
+                src={brand.}
                 height={200}
                 width={200}
                 layer={false}
                 alt={brand.user.coffeeShopName}
                 className='rounded-md cursor-pointer object-cover border-2 light:border-slate-700 border-slate-100'
-              />
+              /> */}
               <div className='w-full pt-15 flex justify-between items-center gap-5 light:text-black'>
                 <div className='w-full flex flex-col justify-start items-start gap-3'>
                   <p className='font-medium text-2xl'>
-                    Tên: {brand.user.coffeeShopName}
+                    Tên: {brand.name}
                   </p>
                   <p className='font-thin text-sm'>
-                    Địa chỉ: {brand.user.address}
+                    Địa chỉ: {brand.address}
                   </p>
                   <p className='font-thin text-sm'>
-                    Email: {brand.user.email}
+                    Email: {brand.email}
                   </p>
                   <p className='font-thin text-sm'>
-                    Sđt: {brand.user.phone}
+                    Sđt: {brand.phone}
                   </p>
                   <Button
                     className='dark:text-white'
-                    onClick={() => handleFollowClick(brand.user.userId, brand.followed)}
+                    onClick={() => handleFollowClick(brand.accountId, brand.followed)}
                   >
                     {brand.followed ? 'Đang Theo Dõi' : 'Theo Dõi'}
                   </Button>

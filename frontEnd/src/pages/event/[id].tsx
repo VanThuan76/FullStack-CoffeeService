@@ -4,6 +4,7 @@ import IconLocation from '@/components/icon/event/IconLocation';
 import IconSchedule from '@/components/icon/event/IconSchedule';
 import { useAppSelector } from '@/hooks/useRedux';
 import { formattedDate } from '@/utils/functions/convertDay';
+import { formatCurrency } from '@/utils/functions/formatCurrency';
 import { Button } from 'antd';
 import Head from 'next/head';
 import { useState } from 'react';
@@ -19,6 +20,8 @@ const EventDetail = ({ eventData }: Props) => {
   const handleBook = () => {
     setOpen(true)
   };
+  /* @ts-ignore */
+  const check = Number(eventData.fromAge) <= Number(user?.age) &&  Number(user?.age) <= Number(eventData.toAge);
   return (
     <>
       <Head>
@@ -58,14 +61,14 @@ const EventDetail = ({ eventData }: Props) => {
           <h1 className='text-xl min-w-1/2'>{eventData.description}</h1>
           <div className='flex flex-col justify-start items-start gap-3'>
             <p>Chỗ ngồi: {eventData.seatCount}</p>
-            <p>Giá: {eventData.price} VND</p>
+            <p>Giá: {formatCurrency(eventData.price)} VND</p>
           </div>
-          {user?.role === 'Customer' && Number(eventData.seatCount) > 0 && (
+          {user?.role === 'Customer' && Number(eventData.seatCount) > 0 && check && (
             <Button className='float-right dark:text-white' onClick={handleBook}>
               Đăng ký
             </Button>
           )}
-          <FormBook data={eventData} open={open} setOpen={setOpen} />
+          <FormBook eventDetail={eventData} open={open} setOpen={setOpen} />
         </div>
       </div>
     </>

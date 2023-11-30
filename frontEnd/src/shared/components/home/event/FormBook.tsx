@@ -3,14 +3,18 @@ import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Input, message, Modal, Row, Col } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { scheduleService } from 'src/shared/services/schedule.service';
 import { IEvent } from 'src/shared/types/event.type';
 interface Props {
   open: any;
   setOpen: any;
-  data: IEvent;
+  eventDetail: IEvent;
 }
-const FormBook = ({ data, open, setOpen }: Props) => {
+const FormBook = ({ eventDetail, open, setOpen }: Props) => {
+  const router = useRouter();
+  const [successChecked, setSuccessChecked] = useState(false);
+
   const [form] = useForm();
   const { user } = useAppSelector(state => state.appSlice);
   const createMutation = useMutation({
@@ -27,15 +31,34 @@ const FormBook = ({ data, open, setOpen }: Props) => {
     },
   });
   async function handleCreate(value: any) {
-    const data = await scheduleService.getVnpay();
+    const body = {
+      id: eventDetail.eventId,
+      customerId: user?.id,
+      ticketCount: value.ticketCount,
+      total: value.ticketCount * eventDetail?.price,
+    };
+    const data = await scheduleService.getVnpay(body);
     window.open(data.data.url);
-    // const formBook = {
-    //   eventId: Number(data.eventId),
-    //   customerId: Number(user?.profileId),
-    //   ticketCount: value.ticketCount
-    // };
-    // createMutation.mutate(formBook);
   }
+
+  useEffect(() => {
+    const { query } = router;
+    const isSuccess = query.success;
+
+    if (!successChecked && isSuccess !== undefined && isSuccess !== null) {
+      const vnpAmount = query.vnp_Amount;
+      if (vnpAmount !== undefined && vnpAmount !== null) {
+        const formBook = {
+          eventId: Number(eventDetail.eventId),
+          customerId: Number(user?.id),
+          ticketCount: Number(vnpAmount) / 100 / eventDetail.price,
+        };
+        createMutation.mutate(formBook);
+      }
+      setSuccessChecked(true);
+    }
+  }, [router.query.success, successChecked]);
+
   return (
     <Modal title='Đặt vé' centered open={open} width={500} footer={false}>
       <Form
@@ -51,7 +74,7 @@ const FormBook = ({ data, open, setOpen }: Props) => {
           name='ticketCount'
           rules={[{ required: true, message: 'Vui lòng nhập số lượng vé' }]}
         >
-          <Input type='number' />
+          <Input max={eventDetail.seatCount} type='number' />
         </Form.Item>
 
         <Row justify={'center'} align={'middle'} gutter={16}>

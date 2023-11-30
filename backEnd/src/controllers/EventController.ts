@@ -15,14 +15,15 @@ export const listEvent = async (req: Request, res: Response) => {
     }
 }
 export const addEvent = async (req: Request, res: Response) => {
-    const { userId, name, address, imageUrl, date, startTime, endTime, seatCount, price, description } = req.body;
+    const { userId, name, address, imageUrl, date, startTime, endTime, seatCount, price, description, fromAge, toAge } = req.body;
     try {
         const image = await Image.findOne({ where: { image: imageUrl } });
         const groupImage = await GroupImage.create({ image_id: Number(image?.image_id) })
         const location = await Location.create({ address: address, user_id: userId })
-        await Event.addEvent({ name: name, location_id: location.location_id, date: date, groupImage_id: groupImage.groupImage_id, description: description, start_time: startTime, end_time: endTime, seat_count: seatCount, price: price, user_id: userId });
+        await Event.addEvent({ name: name, location_id: location.location_id, date: date, groupImage_id: groupImage.groupImage_id, description: description || "", start_time: startTime, end_time: endTime, to_age: toAge, from_age: fromAge, seat_count: seatCount, price: price, user_id: userId });
         return res.status(200).send('Event added successfully');
     } catch (error) {
+        console.log(error)
         return res.status(400).json({ message: 'Error adding event' });
     }
 }

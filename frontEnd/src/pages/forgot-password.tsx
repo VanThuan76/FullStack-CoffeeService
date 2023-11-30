@@ -1,44 +1,30 @@
 import BlankLayout from '@/components/layout/BlankLayout';
-import { useAppDispatch } from '@/hooks/useRedux';
 import { APP_SAVE_KEY } from '@/utils/constants';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Card, Checkbox, Col, Form, Input, message, Row } from 'antd';
-import { getCookie, setCookie } from 'cookies-next';
+import { Button, Card, Form, Input, message } from 'antd';
+import { getCookie } from 'cookies-next';
 import { useRouter } from 'next/router';
 import { authService } from 'src/shared/services/authentication.service';
-import { login } from 'src/shared/stores/appSlice';
-import jwt_decode from 'jwt-decode';
 
 const ForgotPassword = () => {
   const isLogin = getCookie(APP_SAVE_KEY.LOGIN_STATUS);
-  const dispatch = useAppDispatch();
   const router = useRouter();
-  const loginMutation = useMutation({
-    mutationFn: (body: { username: string; password: string }) => authService.authenticated(body),
+  const forgotPasswordMutation = useMutation({
+    mutationFn: (body: { username: string; password: string }) => authService.forgetPasswordNew(body),
     onSuccess(data, _variables, _context) {
       const res = data.data;
-      if (!res.token) return;
-      const decodeData: any = jwt_decode(res.token);
-      if (decodeData) {
-        message.success('Đăng nhập thành công');
-        setCookie(APP_SAVE_KEY.ROLE, decodeData.role);
-        setCookie(APP_SAVE_KEY.TOKEN_KEY, data.data.token);
-        setCookie(APP_SAVE_KEY.LOGIN_STATUS, 'true');
-        dispatch(login(decodeData));
-        if(decodeData.role === "Admin") {
-          router.push("/admin/user")
-        }else{
-          router.push("/")
-        }
+      if (res) {
+        message.success('Thay đổi thành công');
+        router.push('/login');
       }
     },
     onError(error, variables, context) {
-      message.error('Đăng nhập không thành công');
+      message.error('Thay đổi không thành công');
     },
   });
 
   function handleLogin(value: any) {
-    loginMutation.mutate(value);
+    forgotPasswordMutation.mutate(value);
   }
 
   return (
@@ -90,22 +76,32 @@ const ForgotPassword = () => {
                   className='border-b-2 border-b-slate-200'
                 >
                   <Form.Item
-                    label='Email'
-                    name='email'
-                    rules={[{ required: true, message: 'Please input your Email!' }]}
+                    label='Username'
+                    name='username'
+                    rules={[{ required: true, message: 'Please input your Username!' }]}
                   >
                     <Input size='large' />
                   </Form.Item>
-
-                  
+                  <Form.Item
+                    label='Password New'
+                    name='password'
+                    rules={[{ required: true, message: 'Please input your password!' }]}
+                  >
+                    <Input.Password size='large' />
+                  </Form.Item>
 
                   <Form.Item className='w-full text-center'>
-                    <Button className='w-1/2' htmlType='submit' loading={loginMutation.isLoading}>
-                      Nhận Email
+                    <Button className='w-1/2' htmlType='submit' loading={forgotPasswordMutation.isLoading}>
+                      Tiếp tục
                     </Button>
                   </Form.Item>
                 </Form>
-                <p className='mt-3'>Đã có tài khoản? <strong className='hover:text-blue-400 cursor-pointer' onClick={() => router.push("/login")}>Đăng nhập</strong></p>
+                <p className='mt-3'>
+                  Đã có tài khoản?{' '}
+                  <strong className='hover:text-blue-400 cursor-pointer' onClick={() => router.push('/login')}>
+                    Đăng nhập
+                  </strong>
+                </p>
               </Card>
             </div>
           </div>

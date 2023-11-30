@@ -51,7 +51,7 @@ const FormEvent = ({ editId, open, setOpen, refetch }: Props) => {
       updateMutation.mutate(formEdit);
     } else {
       const formCreate = {
-        userId:user && user.id,
+        userId: user && user.id,
         coffeeShopName: user?.name,
         ...value,
       };
@@ -76,7 +76,14 @@ const FormEvent = ({ editId, open, setOpen, refetch }: Props) => {
       footer={false}
       onCancel={() => setOpen(false)} // Đóng modal khi nhấn "Huỷ bỏ" hoặc bấm dấu X
     >
-      <Form form={form} name='basic' initialValues={{ remember: true }} onFinish={handleCreate} autoComplete='off' layout='vertical'>
+      <Form
+        form={form}
+        name='basic'
+        initialValues={{ remember: true }}
+        onFinish={handleCreate}
+        autoComplete='off'
+        layout='vertical'
+      >
         <Form.Item label='Tên sự kiện' name='name' rules={[{ required: true, message: 'Vui lòng nhập sự kiện' }]}>
           <Input />
         </Form.Item>
@@ -93,12 +100,32 @@ const FormEvent = ({ editId, open, setOpen, refetch }: Props) => {
           <DatePicker />
         </Form.Item>
 
-        <Form.Item label='Giờ bắt đầu' name='startTime' rules={[{ required: true, message: 'Vui lòng nhập giờ bắt đầu' }]}>
-          <TimePicker format="HH:mm" />
+        <Form.Item
+          label='Giờ bắt đầu'
+          name='startTime'
+          rules={[{ required: true, message: 'Vui lòng nhập giờ bắt đầu' }]}
+        >
+          <TimePicker format='HH:mm' />
         </Form.Item>
 
-        <Form.Item label='Giờ kết thúc' name='endTime' rules={[{ required: true, message: 'Vui lòng nhập giờ kết thúc' }]}>
-          <TimePicker format="HH:mm" />
+        <Form.Item
+          label='Giờ kết thúc'
+          name='endTime'
+          rules={[{ required: true, message: 'Vui lòng nhập giờ kết thúc' }]}
+        >
+          <TimePicker format='HH:mm' />
+        </Form.Item>
+
+        <Form.Item
+          label='Độ tuổi nhỏ nhất'
+          name='fromAge'
+          rules={[{ required: true, message: 'Vui lòng nhập độ tuổi' }]}
+        >
+          <Input type='number' />
+        </Form.Item>
+
+        <Form.Item label='Độ tuổi lớn nhất' name='toAge' rules={[{ required: true, message: 'Vui lòng nhập độ tuổi' }]}>
+          <Input type='number' />
         </Form.Item>
 
         <Form.Item label='Chỗ ngồi' name='seatCount' rules={[{ required: true, message: 'Vui lòng nhập chỗ ngồi' }]}>

@@ -98,6 +98,14 @@ const Register = () => {
                   </Form.Item>
 
                   <Form.Item
+                    label='Độ tuổi'
+                    name='age'
+                    rules={[{ required: true, message: 'Please input your age!' }]}
+                  >
+                    <Input size='large' />
+                  </Form.Item>
+
+                  <Form.Item
                     label='Số điện thoại'
                     name='phone'
                     rules={[{ required: true, message: 'Please input your phone!' }]}

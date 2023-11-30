@@ -2,6 +2,7 @@ export interface IAuthenticated {
   token: string
 }
 export interface IInforUser {
+  user_id?: number;
   isFollowing: any;
   userId: number;
   address: string;
@@ -24,6 +25,7 @@ export interface IUserbanned {
   role: string;
 }
 export interface IInforUserStored {
+  age?: number;
   customerId: number; // Thêm thuộc tính customerId
   userId: number;
   id: string;

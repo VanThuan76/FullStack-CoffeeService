@@ -47,11 +47,12 @@ class Service extends Model<ServiceAttributes, ServiceCreationAttributes> implem
             throw new Error('Not found');
         }
     }
-    static async addService(newsData: ServiceAttributes): Promise<Service> {
+    static async addService(newsData: any): Promise<Service> {
         try {
             const services = await Service.create(newsData);
             return services;
         } catch (error) {
+            console.log(error)
             throw new Error('Unable to add services');
         }
     }

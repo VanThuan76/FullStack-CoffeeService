@@ -120,6 +120,7 @@ class Schedule extends Model<ScheduleAttributes, ScheduleCreationAttributes> imp
             const newSchedule = await Schedule.create(scheduleData);
             return newSchedule;
         } catch (error) {
+            console.log(error)
             throw new Error('Unable to book schedule');
         }
     }
@@ -186,5 +187,4 @@ Schedule.init(
     }
 );
 export { Schedule };
-Schedule.hasOne(Event, { foreignKey: 'event_id', as: 'event' });
-Schedule.hasOne(User, { foreignKey: 'user_id', as: 'user' });
+
