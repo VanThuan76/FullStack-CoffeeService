@@ -1,5 +1,6 @@
 import BtnCommon from '@/components/common/BtnCommon';
 import { PreImage } from '@/components/common/PreImage';
+import { formattedDate } from '@/utils/functions/convertDay';
 import { useRouter } from 'next/router';
 import { INews } from 'src/shared/types/news.type';
 interface Props {
@@ -22,7 +23,7 @@ const NewsItem = ({ data }: Props) => {
       <div className='flex flex-col justify-between items-start gap-3 p-5'>
         <div className='w-full flex justify-between items-center'>
           <p className='text-orange-500'>Coffee Shop</p>
-          <p className='text-sm text-slate-500'>13/08/2023</p>
+          <p className='text-sm text-slate-500'>{formattedDate(data.createdDate)}</p>
         </div>
         <h2 className='text-2xl'>{data.title}</h2>
         <p className='text-sm text-slate-500'>{data.description}</p>

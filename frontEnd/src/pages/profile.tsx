@@ -25,13 +25,12 @@ const Profile = () => {
       setFormData(updatedFormData);
     }
   };
-
   // Hàm xử lý khi nhấn nút "Cập Nhật Thông Tin"
   const handleUpdateProfile = async (value: any) => {
     try {
       if (value) {
         const body = {
-          user_id: user?.id,
+          user_id: user?.profileId,
           ...value,
         };
         // Gọi phương thức updateUser của userService để cập nhật thông tin người dùng
@@ -127,8 +126,7 @@ const Profile = () => {
           </Col>
         </Row>
       ) : (
-        <DashboardLayout>
-          <Row className='h-screen w-full' gutter={[16, 16]}>
+          <Row className='h-screen w-full p-10' gutter={[16, 16]}>
             <Col className='m-0 h-full w-full p-0' span={12}>
               <div
                 className=' w-full h-screen mobile:h-full'
@@ -197,7 +195,6 @@ const Profile = () => {
               </Form>
             </Col>
           </Row>
-        </DashboardLayout>
       )}
     </React.Fragment>
   );

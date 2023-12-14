@@ -7,7 +7,7 @@ export const listCustomerFollow = async (req: Request, res: Response) => {
         if (following.length > 0) {
             return res.status(200).json(following);
         }
-        return res.status(404).json({ message: 'No following customers found for the customer' });
+        return res.status(200).json([]);
     } catch (error) {
         return res.status(500).json({ message: 'Internal server error' });
     }
@@ -19,7 +19,7 @@ export const listUserFollow = async (req: Request, res: Response) => {
         if (followings.length > 0) {
             return res.status(200).json(followings);
         }
-        return res.status(404).json({ message: 'No following users found for the user' });
+        return res.status(200).json([]);
     } catch (error) {
         return res.status(500).json({ message: 'Internal server error' });
     }

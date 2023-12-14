@@ -8,11 +8,13 @@ import { useQuery } from '@tanstack/react-query';
 import { followingService } from 'src/shared/services/following.service';
 import { useAppSelector } from '@/hooks/useRedux';
 import Following from '@/components/home/following';
+import { useRouter } from 'next/router';
 
 const ScrollRevealWrapper = dynamic(() => import('src/shared/components/common/ScrollRevealWrapper'), { ssr: false });
 
 export function FollowingPage() {
   const [role, setRole] = useState<string>('');
+  const router = useRouter()
   const { user } = useAppSelector(state => state.appSlice);
   const [userType, setUserType] = useState<string>();
   const { data: followingData, refetch } = useQuery(['listFollowing', userType], () =>
@@ -20,6 +22,7 @@ export function FollowingPage() {
       ? followingService.getUserList(user?.id as unknown as number)
       : followingService.getCustomerList(user?.id as unknown as number),
   );
+  console.log(followingData)
   useEffect(() => {
     const role = getCookie(APP_SAVE_KEY.ROLE);
     setRole(role as string);
@@ -32,6 +35,12 @@ export function FollowingPage() {
       setUserType('User');
     }
   }, [role]);
+
+  useEffect(() => {
+    if(!followingData){
+      router.push("/shopList")
+    }
+  }, [followingData]);
 
   return (
     <>

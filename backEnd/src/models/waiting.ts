@@ -9,6 +9,7 @@ interface WaitingAttributes {
   address: string;
   email: string;
   phone: string;
+  status: number;
   coffeeShopName: string;
 }
 
@@ -25,6 +26,7 @@ class Waiting
   public email!: string;
   public phone!: string;
   public coffeeShopName!: string;
+  public status!: number;
   public createdAt!: Date;
   public updatedAt!: Date;
   public readonly customer?: Customer;
@@ -87,6 +89,10 @@ Waiting.init(
     },
     coffeeShopName: {
       type: new DataTypes.STRING(50),
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },

@@ -1,16 +1,11 @@
 import { Request, Response } from "express";
 import { Waiting } from "../models/waiting";
 import { Customer } from "../models/customer";
-import { Op } from "sequelize";
 export const listWaiting = async (req: Request, res: Response) => {
   try {
-    const customers = await Customer.findAll();
-    const customerIds = customers.map((customer) => customer.customer_id);
     const info = await Waiting.findAll({
       where: {
-        customer_id: {
-          [Op.notIn]: customerIds,
-        },
+        status: 1,
       },
     });
 
@@ -32,6 +27,7 @@ export const requestWaiting = async (req: Request, res: Response) => {
         email: customer?.email,
         phone: customer?.phone,
         coffeeShopName: customer?.name,
+        status: 1,
       });
       res.status(200).json({ message: "Waiting record added successfully" });
     }
@@ -53,6 +49,7 @@ export const acceptWaiting = async (req: Request, res: Response) => {
         account_id: customer.account_id,
         email: customer?.email,
         avatar: customer?.avatar,
+        status: 0,
       };
       await Waiting.acceptWaiting(userData);
       res.status(200).json({ message: "Waiting record added successfully" });

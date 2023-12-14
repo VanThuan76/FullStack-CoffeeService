@@ -52,6 +52,7 @@ const DashboardLayout = ({ children }: Props) => {
               src={'/Logo2.png'}
               alt={'Logo'}
               layer={false}
+              onClick={() => router.push("/")}
             />
           </div>
           <Menu

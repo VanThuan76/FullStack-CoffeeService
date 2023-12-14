@@ -27,7 +27,6 @@ interface Customer {
 }
 
 export interface IFollowingAdd {
-  followingId: string;
   customer: CustomerAdd;
   user: UserAdd;
 }

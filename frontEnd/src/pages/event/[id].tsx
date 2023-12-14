@@ -61,7 +61,7 @@ const EventDetail = ({ eventData }: Props) => {
           <h1 className='text-xl min-w-1/2'>{eventData.description}</h1>
           <div className='flex flex-col justify-start items-start gap-3'>
             <p>Chỗ ngồi: {eventData.seatCount}</p>
-            <p>Giá: {formatCurrency(eventData.price)} VND</p>
+            <p>Giá: {formatCurrency(eventData.price)}</p>
           </div>
           {user?.role === 'Customer' && Number(eventData.seatCount) > 0 && check && (
             <Button className='float-right dark:text-white' onClick={handleBook}>

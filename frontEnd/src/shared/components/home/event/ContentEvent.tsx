@@ -1,6 +1,7 @@
 import IconLocation from '@/components/icon/event/IconLocation';
 import IconSchedule from '@/components/icon/event/IconSchedule';
 import { formattedDate } from '@/utils/functions/convertDay';
+import { formatCurrency } from '@/utils/functions/formatCurrency';
 import { IEvent } from 'src/shared/types/event.type';
 interface Props {
   event: IEvent;
@@ -28,7 +29,7 @@ const ContentEvent = ({ event }: Props) => {
       </h1>
       <div className='flex flex-col justify-start items-start gap-3'>
         <p>Chỗ ngồi: {event.seatCount}</p>
-        <p>Giá: {event.price} VND</p>
+        <p>Giá: {formatCurrency(event.price)}</p>
       </div>
     </div>
   );

@@ -79,7 +79,7 @@ class User
   }
   static async updateUser(
     updatedData: Partial<UserCreationAttributes>
-  ): Promise<[number, any[]] | null> {
+  ): Promise<any> {
     try {
       const account = await Account.findByPk(updatedData.user_id);
       if (account) {
@@ -90,39 +90,11 @@ class User
           where: { account_id: account.account_id },
         });
         if (user) {
-          const [updatedRowsCount, updatedUser] = await User.update(
-            updatedData,
-            {
-              where: { user_id: user?.user_id },
-              returning: true,
-            }
-          );
-
-          if (
-            updatedRowsCount === 0 ||
-            !updatedUser ||
-            updatedUser.length === 0
-          ) {
-            throw new Error("Banner not found or unable to update");
-          }
-          return [updatedRowsCount, updatedUser];
-        } else {
-          const [updatedRowsCount, updatedCustomer] = await Customer.update(
-            updatedData,
-            {
-              where: { customer_id: customer?.customer_id },
-              returning: true,
-            }
-          );
-
-          if (
-            updatedRowsCount === 0 ||
-            !updatedCustomer ||
-            updatedCustomer.length === 0
-          ) {
-            throw new Error("Banner not found or unable to update");
-          }
-          return [updatedRowsCount, updatedCustomer];
+          const result = await user.update(updatedData);
+          return result;
+        } else if (customer) {
+          const result = await customer.update(updatedData);
+          return result;
         }
       }
       return null;

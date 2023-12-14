@@ -4,6 +4,7 @@ import TitleSection from '@/components/common/TitleSection';
 import NewsItem from './NewsItem';
 import { useRouter } from 'next/router';
 import { INews } from 'src/shared/types/news.type';
+import { formattedDate } from '@/utils/functions/convertDay';
 
 interface Props {
   isPage: boolean;
@@ -24,7 +25,7 @@ const News = ({ isPage, newsData }: Props) => {
             <PreImage
               src={newsData[0].imageUrl}
               height={!isPage ? 350 : 650}
-              width={!isPage ? 600 : 1980}
+              width={1980}
               layer={false}
               alt={'News'}
               className='w-full relative rounded-lg'
@@ -32,7 +33,7 @@ const News = ({ isPage, newsData }: Props) => {
             <div className='mt-10 px-5 w-full flex flex-col justify-between items-start gap-3'>
               <div className='w-full flex justify-between items-center'>
                 <p className='text-[#92400e]'>Coffee Shop</p>
-                <p className='text-sm text-slate-500'>13/08/2023</p>
+                <p className='text-sm text-slate-500'>{formattedDate(newsData[0].createdDate)}</p>
               </div>
               <h2 className='text-2xl'>{newsData[0].title}</h2>
               <p className='text-sm text-slate-500'>{newsData[0].description}</p>

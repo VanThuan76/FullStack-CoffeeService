@@ -9,6 +9,7 @@ interface AdminAttributes {
     phone: string;
     address: string;
     email: string;
+    avatar: string;
 }
 
 interface AdminCreationAttributes extends Optional<AdminAttributes, 'admin_id'> { }
@@ -20,6 +21,7 @@ class Admin extends Model<AdminAttributes, AdminCreationAttributes> implements A
     public phone!: string;
     public address!: string;
     public email!: string;
+    public avatar!: string;
     public createdAt!: Date;
     public updatedAt!: Date;
     public readonly account?: Account;
@@ -53,6 +55,10 @@ Admin.init(
         },
         email: {
             type: new DataTypes.STRING(30),
+            allowNull: false,
+        },
+        avatar: {
+            type: new DataTypes.STRING(1045),
             allowNull: false,
         },
     },

@@ -89,8 +89,9 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { fullname, username, email, phone, password, age } = req.body;
     const existingAccount = await Account.findOne({
-      where: { username },
+      where: { username: username },
     });
+    console.log(existingAccount)
     if (existingAccount) {
       res.status(400).json({ message: "Account already exists!" });
       return;
@@ -113,7 +114,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       avatar: "",
       age: Number(age),
     });
-    res.json({
+    res.status(200).json({
       id: newAccount.account_id,
       username: newAccount.username,
       email: newCustomer.email,
