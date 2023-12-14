@@ -70,28 +70,28 @@ const UserManagement = ({ }: Props) => {
       dataIndex: 'email',
       key: 'email',
     },
-    {
-      title: 'Hành động',
-      key: 'action',
-      render: (_, record) => (
-        <Space size='middle'>
-          <Button
-            onClick={() => {
-              const body = {
-                role: 'user',
-                profileId: Number(record?.userId),
-              };
-              banUserMutation.mutate(body);
-            }}
-            icon={<WarningOutlined className='text-xs' />}
-            type='primary'
-            danger
-          >
-            Banned
-          </Button>
-        </Space>
-      ),
-    },
+    // {
+    //   title: 'Hành động',
+    //   key: 'action',
+    //   render: (_, record) => (
+    //     <Space size='middle'>
+    //       <Button
+    //         onClick={() => {
+    //           const body = {
+    //             role: 'user',
+    //             profileId: Number(record?.userId),
+    //           };
+    //           banUserMutation.mutate(body);
+    //         }}
+    //         icon={<WarningOutlined className='text-xs' />}
+    //         type='primary'
+    //         danger
+    //       >
+    //         Banned
+    //       </Button>
+    //     </Space>
+    //   ),
+    // },
   ];
 
   // Lọc danh sách người dùng dựa trên searchText

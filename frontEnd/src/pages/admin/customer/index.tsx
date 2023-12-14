@@ -52,24 +52,24 @@ const CustomerManagement = ({ }: Props) => {
       dataIndex: 'email',
       key: 'email',
     },
-    {
-      title: 'Hành động',
-      key: 'action',
-      render: (_, record) => (
-        <Space size='middle'>
-          <div
-            className='cursor-pointer'
-            onClick={() => {
-              setAction('ban');
-              setOpen(true);
-              setRowId(record.customerId);
-            }}
-          >
-            <StopOutlined /> Ban Account
-          </div>
-        </Space>
-      ),
-    },
+    // {
+    //   title: 'Hành động',
+    //   key: 'action',
+    //   render: (_, record) => (
+    //     <Space size='middle'>
+    //       <div
+    //         className='cursor-pointer'
+    //         onClick={() => {
+    //           setAction('ban');
+    //           setOpen(true);
+    //           setRowId(record.customerId);
+    //         }}
+    //       >
+    //         <StopOutlined /> Ban Account
+    //       </div>
+    //     </Space>
+    //   ),
+    // },
   ];
   const filteredData = dataCustomer?.data?.filter((customer) =>
     customer.name.toLowerCase().includes(searchText.toLowerCase())

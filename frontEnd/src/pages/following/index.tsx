@@ -35,13 +35,6 @@ export function FollowingPage() {
       setUserType('User');
     }
   }, [role]);
-
-  useEffect(() => {
-    if(!followingData){
-      router.push("/shopList")
-    }
-  }, [followingData]);
-
   return (
     <>
       <Head>

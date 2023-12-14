@@ -105,33 +105,6 @@ const BrandList = ({ brandsData }: Props) => {
       <div className='relative w-full mt-5 pb-32 grid grid-cols-1 sm:gird-cols-2 md:grid-cols-3 lg:grid-cols-4 items-start justify-between gap-10'>
         {brandDataFollowingLoading ? (
           <p>Loading...</p>
-        ) : brandDataFollowing?.data ? (
-          brandDataFollowing?.data.map((brand, idx) => (
-            <div className='mt-5' key={idx}>
-              <PreImage
-                src={brand.user.avatar}
-                height={200}
-                width={200}
-                layer={false}
-                alt={brand.user.coffeeShopName}
-                className='rounded-md cursor-pointer object-cover border-2 light:border-slate-700 border-slate-100'
-              />
-              <div className='w-full pt-15 flex justify-between items-center gap-5 light:text-black'>
-                <div className='w-full flex flex-col justify-start items-start gap-3'>
-                  <p className='font-medium text-2xl'>Tên: {brand.user.coffeeShopName}</p>
-                  <p className='font-thin text-sm'>Địa chỉ: {brand.user.address}</p>
-                  <p className='font-thin text-sm'>Email: {brand.user.email}</p>
-                  <p className='font-thin text-sm'>Sđt: {brand.user.phone}</p>
-                  <Button
-                    className='dark:text-white'
-                    onClick={() => handleFollowClick(brand.user.userId, brand.followed)}
-                  >
-                    {brand.followed ? 'Đang Theo Dõi' : 'Theo Dõi'}
-                  </Button>
-                </div>
-              </div>
-            </div>
-          ))
         ) : (
           Array.isArray(brandsData) &&
           brandsData.map((brand, idx) => (
